@@ -1,0 +1,178 @@
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Weather Predictor</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to right, #6fb1fc, #c1f4f7);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .weather-card {
+      background-color: #ffffffee;
+      border-radius: 16px;
+      padding: 30px 40px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      max-width: 900px;
+      width: 100%;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .weather-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .form-row {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .form-control {
+      border-radius: 8px;
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    .form-control:focus {
+      box-shadow: 0 0 10px rgba(33, 150, 243, 0.8);
+      transform: scale(1.02);
+    }
+
+    .btn {
+      border-radius: 8px;
+      background-color: #007bff;
+      color: white;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+
+    .summary-card {
+      background-color: #f0f9ff;
+      padding: 20px;
+      border-left: 6px solid #0d6efd;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .summary-card:hover {
+      background-color: #e0f2ff;
+      transform: scale(1.02);
+    }
+
+    .param-card {
+      background-color: #f9f9f9;
+      border-radius: 12px;
+      padding: 15px 20px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      height: 100%;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .param-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .param-card h6 {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #0d6efd;
+    }
+
+    .param-card i {
+      color: #0d6efd;
+      margin-right: 6px;
+    }
+
+    .section-title {
+      margin-top: 30px;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #198754;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .alert {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .alert:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+    }
+  </style>
+</head>
+<body>
+
+<div class="weather-card">
+  <h1 class="text-center mb-4"><i class="bi bi-cloud-sun"></i> Weather Predictor</h1>
+
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-row">
+      <div class="col-md-6 flex-grow-1">
+        {{ form.location|add_class:"form-control" }}
+      </div>
+      <div class="col-md-6 flex-grow-1">
+        {{ form.date|add_class:"form-control" }}
+      </div>
+    </div>
+    <div class="text-center">
+      <button type="submit" class="btn btn-primary px-4"><i class="bi bi-search"></i> Get Weather</button>
+    </div>
+  </form>
+
+  {% if weather_data %}
+    <hr class="my-4">
+
+    <!-- Summary -->
+    <div class="summary-card">
+      <h5><i class="bi bi-geo-alt-fill"></i> Location: <strong>{{ form.location.value }}</strong></h5>
+      <h5><i class="bi {{ weather_data.weather_icon }}"></i> Condition: <strong>{{ weather_data.weather_condition }}</strong></h5>
+    </div>
+
+    <!-- Forecast Section -->
+    <div class="section-title"><i class="bi bi-calendar-check"></i> Forecast Details</div>
+    <div class="row mt-3">
+      <div class="col-md-6 mb-4"><div class="param-card"><h6><i class="bi bi-calendar-date"></i> Date</h6> {{ weather_data.date }}</div></div>
+      <div class="col-md-6 mb-4"><div class="param-card"><h6><i class="bi bi-thermometer-half"></i> Temp (Avg)</h6> {{ weather_data.temperature_avg }} °C</div></div>
+      <div class="col-md-6 mb-4"><div class="param-card"><h6><i class="bi bi-thermometer-low"></i> Temp (Min)</h6> {{ weather_data.temperature_min }} °C</div></div>
+      <div class="col-md-6 mb-4"><div class="param-card"><h6><i class="bi bi-thermometer-high"></i> Temp (Max)</h6> {{ weather_data.temperature_max }} °C</div></div>
+      <div class="col-md-6 mb-4"><div class="param-card"><h6><i class="bi bi-droplet-half"></i> Humidity</h6> {{ weather_data.humidity }}%</div></div>
+      <div class="col-md-6 mb-4"><div class="param-card"><h6><i class="bi bi-cloud-drizzle"></i> Rain Prob</h6> {{ weather_data.rain_probability }}%</div></div>
+      <div class="col-md-6 mb-4"><div class="param-card"><h6><i class="bi bi-wind"></i> Wind Speed</h6> {{ weather_data.wind_speed }} km/h</div></div>
+      <div class="col-md-6 mb-4"><div class="param-card"><h6><i class="bi bi-sun"></i> UV Index</h6> {{ weather_data.uv_index }}</div></div>
+      <div class="col-md-6 mb-4"><div class="param-card"><h6><i class="bi bi-sunrise"></i> Sunrise</h6> {{ weather_data.sunrise }}</div></div>
+      <div class="col-md-6 mb-4"><div class="param-card"><h6><i class="bi bi-sunset"></i> Sunset</h6> {{ weather_data.sunset }}</div></div>
+    </div>
+
+  {% elif weather_data is not none %}
+    <div class="alert alert-warning text-center mt-4" role="alert">
+      <i class="bi bi-exclamation-triangle-fill"></i> No weather data found for this date/location.
+    </div>
+  {% endif %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

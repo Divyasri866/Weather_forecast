@@ -1,0 +1,168 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SkyCast - Choose Forecast Method</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f6f9;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 1s ease;
+        }
+
+        .card {
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+            background: white;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-custom {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-custom-primary {
+            background-color: #0074d9;
+            color: white;
+            border: none;
+        }
+
+        .btn-custom-primary:hover {
+            background-color: #005bb5;
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-custom-success {
+            background-color: #28a745;
+            color: white;
+            border: none;
+        }
+
+        .btn-custom-success:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background: rgba(33, 37, 41, 0.95) !important;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #0dcaf0;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">SkyCast</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link active" href="{% url 'index' %}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'weather_options' %}">Weather</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'otherservices' %}">Services</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'blog2' %}">Blog</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'feedback' %}">Feedback</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<main class="container">
+    <div class="card">
+        <h2 class="mb-4">Choose Forecast Method</h2>
+        <div class="row g-3 justify-content-center">
+            <div class="col-md-6 d-flex justify-content-center">
+                <a href="{% url 'weather' %}" class="btn btn-custom btn-custom-primary">Weather by Location</a>
+            </div>
+            <div class="col-md-6 d-flex justify-content-center">
+                <a href="{% url 'weather-by-coordinates' %}" class="btn btn-custom btn-custom-success">Weather by Coordinates</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer with Social Links -->
+<footer class="bg-dark text-white py-4 mt-auto">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <p>&copy; 2025 SkyCast. All rights reserved.</p>
+            </div>
+            <div class="col-md-6 text-end">
+                <a href="#" class="text-white me-3"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-white"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Guidance - WeatherAI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2196f3;
+            --secondary: #64b5f6;
+            --dark: #1976d2;
+            --light: #bbdefb;
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --info-color: #0dcaf0;
+            --gradient: linear-gradient(120deg, #00b4db, #0083b0);
+        }
+
+        body {
+            background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBYW4wZHEEyaAcTzMKpqjNS9f4CA27B0hbWA&s') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            overflow-y: auto;
+        }
+
+        .navbar {
+            background: rgba(33, 37, 41, 0.95) !important;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .career-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .career-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            padding: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .career-card {
+            width: 100%;
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: left;
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .career-icon {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .career-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .modal-content {
+            border-radius: 10px;
+            border: none;
+        }
+
+        .modal-header {
+            background: var(--primary);
+            color: white;
+            border-radius: 10px 10px 0 0;
+            padding: 1rem 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .skill-list {
+            padding-left: 1.2rem;
+        }
+
+        .skill-list li {
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+
+        .salary-info {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .career-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+        }
+
+        footer {
+            background:#001f3f;
+            color: white;
+            padding: 20px 0;
+            margin-top: 20px;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #0074d9;
+        }
+
+        @media (max-width: 768px) {
+            footer .row {
+                text-align: center;
+            }
+            
+            footer .col-md-6:last-child {
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">SkyCast</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link " href="{% url 'index'%}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link " href="{% url 'weather_options'%}">Weather</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{% url 'otherservices'%}">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'blog2'%}">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'feedback'%}">Feedback</a></li>
+               </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Career Section -->
+    <div class="career-container">
+        <h2 class="text-center mb-4">Explore Career Paths</h2>
+        <div class="career-grid">
+            <button class="career-card" data-bs-toggle="modal" data-bs-target="#modal1" style="animation-delay: 0.1s">
+                <i class="fas fa-code career-icon"></i>
+                <div class="career-title">Java Developer</div>
+                <small class="text-muted">Web & Enterprise Applications</small>
+            </button>
+
+            <button class="career-card" data-bs-toggle="modal" data-bs-target="#modal2" style="animation-delay: 0.2s">
+                <i class="fas fa-laptop-code career-icon"></i>
+                <div class="career-title">Software Developer</div>
+                <small class="text-muted">Full Stack Development</small>
+            </button>
+
+            <button class="career-card" data-bs-toggle="modal" data-bs-target="#modal3" style="animation-delay: 0.3s">
+                <i class="fas fa-database career-icon"></i>
+                <div class="career-title">Data Science</div>
+                <small class="text-muted">AI & Machine Learning</small>
+            </button>
+
+            <button class="career-card" data-bs-toggle="modal" data-bs-target="#modal4" style="animation-delay: 0.4s">
+                <i class="fas fa-chart-bar career-icon"></i>
+                <div class="career-title">Data Analytics</div>
+                <small class="text-muted">Business Intelligence</small>
+            </button>
+
+            <button class="career-card" data-bs-toggle="modal" data-bs-target="#modal5" style="animation-delay: 0.5s">
+                <i class="fas fa-brain career-icon"></i>
+                <div class="career-title">AI Engineer</div>
+                <small class="text-muted">Artificial Intelligence</small>
+            </button>
+
+            <button class="career-card" data-bs-toggle="modal" data-bs-target="#modal6" style="animation-delay: 0.6s">
+                <i class="fas fa-network-wired career-icon"></i>
+                <div class="career-title">IT & Networking</div>
+                <small class="text-muted">Infrastructure & Security</small>
+            </button>
+
+            <button class="career-card" data-bs-toggle="modal" data-bs-target="#modal7" style="animation-delay: 0.7s">
+                <i class="fas fa-project-diagram career-icon"></i>
+                <div class="career-title">DSA Expert</div>
+                <small class="text-muted">Algorithms & Problem Solving</small>
+            </button>
+
+            <button class="career-card" data-bs-toggle="modal" data-bs-target="#modal8" style="animation-delay: 0.8s">
+                <i class="fas fa-cloud career-icon"></i>
+                <div class="career-title">Cloud Engineer</div>
+                <small class="text-muted">AWS, Azure & DevOps</small>
+            </button>
+        </div>
+    </div>
+
+    <!-- Example Modal -->
+    <div class="modal fade" id="modal1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Java Developer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Java developers create enterprise-level applications using Java and related technologies.</p>
+                    
+                    <h6 class="fw-bold mt-3">Key Skills:</h6>
+                    <ul class="skill-list">
+                        <li>Core Java & Advanced Java concepts</li>
+                        <li>Spring Framework & Hibernate</li>
+                        <li>Database Management (SQL)</li>
+                        <li>Version Control (Git)</li>
+                    </ul>
+
+                    <div class="salary-info">
+                        <h6 class="fw-bold">Salary Range:</h6>
+                        <p class="mb-1">Entry Level: ₹3-6 LPA</p>
+                        <p class="mb-1">Mid Level: ₹6-12 LPA</p>
+                        <p class="mb-0">Senior Level: ₹12-20 LPA</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Software Developer Modal -->
+    <div class="modal fade" id="modal2">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Software Developer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Software developers design, develop, and maintain software applications across various platforms.</p>
+                    
+                    <h6 class="fw-bold mt-3">Key Skills:</h6>
+                    <ul class="skill-list">
+                        <li>Multiple Programming Languages (Java, Python, JavaScript)</li>
+                        <li>Full Stack Development</li>
+                        <li>Software Architecture & Design Patterns</li>
+                        <li>Agile Development Methodologies</li>
+                    </ul>
+
+                    <div class="salary-info">
+                        <h6 class="fw-bold">Salary Range:</h6>
+                        <p class="mb-1">Entry Level: ₹5-8 LPA</p>
+                        <p class="mb-1">Mid Level: ₹8-15 LPA</p>
+                        <p class="mb-0">Senior Level: ₹15-25 LPA</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Science Modal -->
+    <div class="modal fade" id="modal3">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Data Science</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Data Scientists analyze complex data to help organizations make informed decisions.</p>
+                    
+                    <h6 class="fw-bold mt-3">Key Skills:</h6>
+                    <ul class="skill-list">
+                        <li>Python for Data Science (NumPy, Pandas)</li>
+                        <li>Machine Learning Algorithms</li>
+                        <li>Statistical Analysis</li>
+                        <li>Data Visualization (Tableau, PowerBI)</li>
+                    </ul>
+
+                    <div class="salary-info">
+                        <h6 class="fw-bold">Salary Range:</h6>
+                        <p class="mb-1">Entry Level: ₹6-10 LPA</p>
+                        <p class="mb-1">Mid Level: ₹10-18 LPA</p>
+                        <p class="mb-0">Senior Level: ₹18-30 LPA</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Analytics Modal -->
+    <div class="modal fade" id="modal4">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Data Analytics</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Data Analysts interpret data and turn it into information which can offer ways to improve business.</p>
+                    
+                    <h6 class="fw-bold mt-3">Key Skills:</h6>
+                    <ul class="skill-list">
+                        <li>SQL and Database Management</li>
+                        <li>Excel Advanced Analytics</li>
+                        <li>Data Visualization Tools</li>
+                        <li>Business Intelligence</li>
+                    </ul>
+
+                    <div class="salary-info">
+                        <h6 class="fw-bold">Salary Range:</h6>
+                        <p class="mb-1">Entry Level: ₹4-8 LPA</p>
+                        <p class="mb-1">Mid Level: ₹8-15 LPA</p>
+                        <p class="mb-0">Senior Level: ₹15-25 LPA</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Engineer Modal -->
+    <div class="modal fade" id="modal5">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">AI Engineer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>AI Engineers develop and implement artificial intelligence solutions and neural networks.</p>
+                    
+                    <h6 class="fw-bold mt-3">Key Skills:</h6>
+                    <ul class="skill-list">
+                        <li>Deep Learning Frameworks (TensorFlow, PyTorch)</li>
+                        <li>Natural Language Processing</li>
+                        <li>Computer Vision</li>
+                        <li>Neural Network Architecture</li>
+                    </ul>
+
+                    <div class="salary-info">
+                        <h6 class="fw-bold">Salary Range:</h6>
+                        <p class="mb-1">Entry Level: ₹8-12 LPA</p>
+                        <p class="mb-1">Mid Level: ₹12-20 LPA</p>
+                        <p class="mb-0">Senior Level: ₹20-35 LPA</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- IT & Networking Modal -->
+    <div class="modal fade" id="modal6">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">IT & Networking</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>IT & Network professionals manage and maintain organization's network infrastructure.</p>
+                    
+                    <h6 class="fw-bold mt-3">Key Skills:</h6>
+                    <ul class="skill-list">
+                        <li>Network Security</li>
+                        <li>Cloud Infrastructure</li>
+                        <li>System Administration</li>
+                        <li>IT Service Management</li>
+                    </ul>
+
+                    <div class="salary-info">
+                        <h6 class="fw-bold">Salary Range:</h6>
+                        <p class="mb-1">Entry Level: ₹4-7 LPA</p>
+                        <p class="mb-1">Mid Level: ₹7-12 LPA</p>
+                        <p class="mb-0">Senior Level: ₹12-20 LPA</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DSA Expert Modal -->
+    <div class="modal fade" id="modal7">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">DSA Expert</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>DSA Experts specialize in optimizing code performance and solving complex algorithmic problems.</p>
+                    
+                    <h6 class="fw-bold mt-3">Key Skills:</h6>
+                    <ul class="skill-list">
+                        <li>Advanced Data Structures</li>
+                        <li>Algorithm Design & Analysis</li>
+                        <li>Problem-Solving Skills</li>
+                        <li>Competitive Programming</li>
+                    </ul>
+
+                    <div class="salary-info">
+                        <h6 class="fw-bold">Salary Range:</h6>
+                        <p class="mb-1">Entry Level: ₹6-10 LPA</p>
+                        <p class="mb-1">Mid Level: ₹10-18 LPA</p>
+                        <p class="mb-0">Senior Level: ₹18-30 LPA</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cloud Engineer Modal -->
+    <div class="modal fade" id="modal8">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cloud Engineer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Cloud Engineers design, implement and manage cloud-based solutions for organizations.</p>
+                    
+                    <h6 class="fw-bold mt-3">Key Skills:</h6>
+                    <ul class="skill-list">
+                        <li>AWS/Azure/Google Cloud Platform</li>
+                        <li>DevOps Practices</li>
+                        <li>Container Technologies (Docker, Kubernetes)</li>
+                        <li>Infrastructure as Code</li>
+                    </ul>
+
+                    <div class="salary-info">
+                        <h6 class="fw-bold">Salary Range:</h6>
+                        <p class="mb-1">Entry Level: ₹7-12 LPA</p>
+                        <p class="mb-1">Mid Level: ₹12-20 LPA</p>
+                        <p class="mb-0">Senior Level: ₹20-35 LPA</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; 2025 SkyCast. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <a href="#" class="text-white me-3"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-white"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add animation classes to cards
+            const cards = document.querySelectorAll('.career-card');
+            cards.forEach(card => {
+                const delay = card.style.animationDelay;
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, parseFloat(delay) * 1000);
+            });
+
+            // Add hover effect
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.querySelector('.career-icon').style.transform = 'scale(1.2)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.querySelector('.career-icon').style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyCast</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <link rel="stylesheet" href="styles/main.css">
+    <style>
+        /* Global Styles */
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --info-color: #0dcaf0;
+            --gradient: linear-gradient(120deg, #00b4db, #0083b0);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background: rgba(33, 37, 41, 0.95) !important;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: var(--gradient);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('/assets/weather-pattern.png');
+            opacity: 0.1;
+        }
+
+        .hero-section h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            animation: fadeIn 1s ease;
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 1s ease 0.3s backwards;
+        }
+
+        /* Weather Cards */
+        .weather-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .weather-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Feature Boxes */
+        .feature-box {
+            padding: 30px;
+            border-radius: 15px;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feature-box i {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Contact Form */
+        #contact-form {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .form-control {
+            border: 2px solid #eee;
+            padding: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: none;
+        }
+
+        /* Custom Button Style */
+        .btn-primary {
+            background: var(--gradient);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Header Logos */
+        .header-logos {
+            background: #fff;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-container img {
+            height: 60px;
+            width: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-container img:hover {
+            transform: scale(1.05);
+        }
+
+        .college-name {
+            font-size: 1.2rem;
+            color: #333;
+            margin: 0 15px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .logo-container {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            
+            .college-name {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Logos -->
+    <div class="header-logos">
+        <div class="container">
+            <div class="logo-container">
+                <img src="https://vignaniit.edu.in/images/09%20copy-1.jpg" alt="College Logo" title="Your College Name">
+                <span class="college-name d-none d-md-block">Vignan Institute Of Information Technology,Duvvada</span>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRR-A81pLcVQUk8J0J1JoDgpauIhdV6ROrY07tyRfJFxEWIUHEfEC_CH9g&usqp=CAE&s" alt="CSE Department Logo" title="Computer Science & Engineering">
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">SkyCast</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="{% url 'index'%}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'weather_options'%}">Weather</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'otherservices'%}">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'blog2'%}">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'feedback'%}">Feedback</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- Hero Section with Weather Search and Map Side-by-Side -->
+<section id="home" class="hero-section py-5">
+    <div class="container">
+        <div class="row align-items-start">
+            <div class="col-md-6">
+                <h1>AI-Powered Weather Forecasting</h1>
+                <p class="lead">Get accurate weather predictions using advanced machine learning algorithms</p>
+
+                <div class="row g-2 align-items-center">
+                    <div class="col-8">
+                        <input id="locationInput" type="text" class="form-control" placeholder="Enter location..." />
+                    </div>
+                    <div class="col-4">
+                        <button id="getForecastButton" class="btn btn-primary w-100">Get Forecast</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mt-4 mt-md-0">
+                <div id="weather-map" class="map-container" style="height: 300px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div>
+            </div>
+        </div>
+    </div>
+</section>
+  
+
+    <!-- Weather Carousel -->
+    <section id="forecast" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-4">Weather Forecast</h2>
+            <div id="weatherCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="weather-card">
+                                    <h3>Today</h3>
+                                    <i class="fas fa-sun fa-3x text-warning mb-3"></i>
+                                    <h4>28°C</h4>
+                                    <p>Sunny</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="weather-card">
+                                    <h3>Tomorrow</h3>
+                                    <i class="fas fa-cloud fa-3x text-secondary mb-3"></i>
+                                    <h4>24°C</h4>
+                                    <p>Partly Cloudy</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="weather-card">
+                                    <h3>Day After</h3>
+                                    <i class="fas fa-cloud-rain fa-3x text-info mb-3"></i>
+                                    <h4>22°C</h4>
+                                    <p>Light Rain</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Add more carousel items as needed -->
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#weatherCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#weatherCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">How It Works</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="feature-box text-center">
+                        <i class="fas fa-database fa-3x mb-3"></i>
+                        <h3>Data Collection</h3>
+                        <p>Real-time data from multiple sources</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-box text-center">
+                        <i class="fas fa-brain fa-3x mb-3"></i>
+                        <h3>AI Processing</h3>
+                        <p>Advanced ML algorithms analyze patterns</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-box text-center">
+                        <i class="fas fa-chart-line fa-3x mb-3"></i>
+                        <h3>Accurate Prediction</h3>
+                        <p>Precise forecasts with high accuracy</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-4">Contact Us</h2>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <form action="{% url 'index' %}" method="POST">
+    {% csrf_token %}
+    <div class="mb-3">
+        <input type="text" class="form-control" name="name" placeholder="Name" required>
+    </div>
+    <div class="mb-3">
+        <input type="email" class="form-control" name="email" placeholder="Email" required>
+    </div>
+    <div class="mb-3">
+        <textarea class="form-control" name="message" rows="4" placeholder="Message" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Send Message</button>
+</form>
+
+<!-- Success Alert -->
+{% if message_sent %}
+    <div class="alert alert-success mt-3" role="alert">
+        Message sent successfully!
+    </div>
+{% endif %}
+
+<!-- Error Alert -->
+{% if error %}
+    <div class="alert alert-danger mt-3" role="alert">
+        {{ error }}
+    </div>
+{% endif %}
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer with Social Links -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; 2025 SkyCast. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <a href="#" class="text-white me-3"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-white"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+    <script src="src/app.js" type="module"></script>
+    <script>
+        // Initialize animations on scroll
+        document.addEventListener('DOMContentLoaded', () => {
+            // Navbar scroll effect
+            window.addEventListener('scroll', () => {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 50) {
+                    navbar.style.background = 'rgba(33, 37, 41, 0.98)';
+                    navbar.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+                } else {
+                    navbar.style.background = 'rgba(33, 37, 41, 0.95)';
+                    navbar.style.boxShadow = 'none';
+                }
+            });
+
+            // Initialize Bootstrap tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+
+            // Initialize weather carousel
+            const weatherCarousel = new bootstrap.Carousel(document.getElementById('weatherCarousel'), {
+                interval: 3000,
+                ride: 'carousel',
+                wrap: true
+            });
+        });
+    
+  var map = L.map('weather-map').setView([17.6868, 83.2185], 10); // Default to Vizag
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  map.on('click', function (e) {
+    var lat = e.latlng.lat;
+    var lon = e.latlng.lng;
+
+    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`)
+      .then(response => response.json())
+      .then(data => {
+        var city = data.address.city || data.address.town || data.address.village || data.address.county || data.address.state;
+        if (city) {
+          document.getElementById('locationInput').value = city;
+        } else {
+          alert("No city found for this location! Try clicking a nearby area.");
+        }
+      })
+      .catch(error => console.error('Error:', error));
+  });
+ 
+document.addEventListener('DOMContentLoaded', () => {
+    const locationInput = document.getElementById('locationInput');
+    const getForecastButton = document.getElementById('getForecastButton');
+    const map = L.map('weather-map').setView([17.6868, 83.2185], 10); // Default to Vizag
+
+    // Add OpenStreetMap Layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Map Click Event to Get Location
+    map.on('click', function (e) {
+        const lat = e.latlng.lat;
+        const lon = e.latlng.lng;
+
+        fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`)
+            .then(response => response.json())
+            .then(data => {
+                const city = data.address.city || data.address.town || data.address.village || data.address.county || data.address.state;
+                if (city) {
+                    locationInput.value = city;
+                } else {
+                    alert("No city found for this location! Try clicking a nearby area.");
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    });
+
+    // Button Click Event to Redirect
+    if (locationInput && getForecastButton) {
+        getForecastButton.addEventListener('click', () => {
+            const location = locationInput.value.trim();
+            if (location) {
+                // Redirect to the weather.html page with the location as a query parameter
+                const weatherUrl = "{% url 'weather'%}"; // Update this path if necessary
+                window.location.href = `${weatherUrl}?location=${encodeURIComponent(location)}`;
+            } else {
+                alert('Please enter a location.');
+            }
+        });
+    } else {
+        console.error('Search bar or button not found in the DOM.');
+    }
+});
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const locationInput = document.getElementById('locationInput');
+    const getForecastButton = document.getElementById('getForecastButton');
+
+    if (locationInput && getForecastButton) {
+        getForecastButton.addEventListener('click', () => {
+            const location = locationInput.value.trim();
+            if (location) {
+                // Redirect to the weather page with the location as a query parameter
+                const weatherUrl = `{% url 'weather' %}`;
+                window.location.href = `${weatherUrl}?location=${encodeURIComponent(location)}`;
+            } else {
+                alert('Please enter a location.');
+            }
+        });
+    } else {
+        console.error('Search bar or button not found in the DOM.');
+    }
+});
+
+    <!-- Add this script at the end of the body, just before the closing </body> tag -->
+
+    (function() {
+        if (!window.chatbase || window.chatbase("getState") !== "initialized") {
+            window.chatbase = (...arguments) => {
+                if (!window.chatbase.q) {
+                    window.chatbase.q = [];
+                }
+                window.chatbase.q.push(arguments);
+            };
+            window.chatbase = new Proxy(window.chatbase, {
+                get(target, prop) {
+                    if (prop === "q") {
+                        return target.q;
+                    }
+                    return (...args) => target(prop, ...args);
+                }
+            });
+        }
+        const onLoad = function() {
+            const script = document.createElement("script");
+            script.src = "https://www.chatbase.co/embed.min.js";
+            script.id = "wO6XWIqNMmsKyifjF0In5";
+            script.domain = "www.chatbase.co";
+            document.body.appendChild(script);
+        };
+        if (document.readyState === "complete") {
+            onLoad();
+        } else {
+            window.addEventListener("load", onLoad);
+        }
+    })();
+</script>
+</body>
+</html>

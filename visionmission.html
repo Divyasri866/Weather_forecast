@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vision and Mission - SkyCast</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.95), rgba(42, 82, 152, 0.95)),
+                        url('https://images.unsplash.com/photo-1514477917009-389c76a86b68') center/cover fixed;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .main-header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-img {
+            width: 48px;
+            height: 48px;
+            transition: transform 0.3s ease;
+        }
+
+        .brand-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 5px 15px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .search-input {
+            background: none;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            width: 180px;
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .search-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .search-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background: rgba(33, 37, 41, 0.95) !important;
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand-container {
+            margin-right: auto; /* Push to left */
+        }
+
+        .navbar-collapse {
+            justify-content: flex-end; /* Push nav items and search to right */
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #00ffff, #87CEEB);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-logo {
+            width: 36px;
+            height: 36px;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-logo:hover {
+            transform: scale(1.1);
+        }
+
+        .navbar-nav {
+            margin-left: 0; /* Remove left margin */
+            margin-right: 1rem; /* Add space between nav items and search */
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            padding: 0.5rem 1rem !important;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: #87CEEB;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 80%;
+        }
+
+        /* Content Styling */
+        .vision-mission-container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 0 20px;
+            display: flex;
+            gap: 15px; /* Reduced from 30px */
+            align-items: stretch;
+            flex: 1;
+            justify-content: center; /* Center cards horizontally */
+        }
+
+        .content-card {
+            flex: 0 1 500px; /* Fixed width cards */
+            margin-bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            transform: translateY(20px);
+            opacity: 0.8;
+        }
+
+        .content-card:hover {
+            transform: translateY(0);
+            background: rgba(255, 255, 255, 0.25);
+            opacity: 1;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .content-card h2 {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .content-card p {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.8;
+            text-align: justify;
+            margin-bottom: 0;
+        }
+
+        .content-card i {
+            margin-right: 10px;
+            color: #87CEEB;
+        }
+
+        /* Footer Styling */
+        footer {
+            background: #001f3f !important;
+            color: white;
+            padding: 20px 0;
+            width: 100%;
+            margin-top: auto; /* Push footer to bottom */
+        }
+
+        footer a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #0074d9;
+        }
+
+        @media (max-width: 768px) {
+            .logo-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .college-name {
+                font-size: 1rem;
+            }
+
+            footer .row {
+                text-align: center;
+            }
+            
+            footer .col-md-6:last-child {
+                margin-top: 1rem;
+            }
+
+            .search-box {
+                margin-top: 10px;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .search-input {
+                width: 100%;
+            }
+            
+            .vision-mission-container {
+                padding: 20px;
+                margin: 0 auto;
+            }
+            
+            .content-card {
+                flex: 1 1 100%;
+                margin-bottom: 0;
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+            
+            .navbar-nav {
+                margin-left: 0;
+                gap: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <!-- Logo and Brand moved to left -->
+            <div class="navbar-brand-container">
+                <div class="d-flex align-items-center">
+                    <img src="https://img.icons8.com/fluency/48/000000/weather.png" alt="SkyCast Logo" class="nav-logo me-2">
+                    <a class="navbar-brand" href="index.html">SkyCast</a>
+                </div>
+            </div>
+
+            <!-- Toggler button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Nav items and search moved to right -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav gap-3">
+                     <li class="nav-item"><a class="nav-link " href="{% url 'index'%}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link " href="{% url 'weather_options' %}">Weather</a></li>
+                    <li class="nav-item"><a class="nav-link " href="{% url 'otherservices'%}">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'blog2'%}">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{% url 'feedback'%}">Feedback</a></li>
+           </ul>
+                <div class="search-box">
+                    <input type="text" placeholder="Search..." class="search-input">
+                    <button class="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="vision-mission-container">
+        <div class="content-card">
+            <h2><i class="fas fa-eye"></i> Our Vision</h2>
+            <p>We envision creating a future where weather forecasts are not only highly accurate and accessible but also seamlessly integrated into the daily lives of individuals and the essential operations of communities. Our goal is to empower people to make informed decisions, stay safe, and respond proactively to changing weather conditions. By harnessing advanced technologies such as artificial intelligence, machine learning, and real-time data analytics, we aim to transform traditional forecasting methods. Our intelligent system will synthesize satellite imagery, sensor networks, radar inputs, and historical climate patterns to provide hyper-local, precise, and timely weather insights. This innovation will not only enhance public safety through early warning alerts but also support critical sectors such as agriculture, disaster management, logistics, and infrastructure planning.</p>
+        </div>
+
+        <div class="content-card">
+            <h2><i class="fas fa-bullseye"></i> Our Mission</h2>
+            <p>Our mission is to deliver precise, user-friendly weather predictions that enhance daily life planning, safety, and long-term preparedness. We are committed to providing timely updates and early warnings by integrating advanced technologies such as artificial intelligence, machine learning, and IoT-based sensor networks. By collaborating with meteorological experts, data scientists, and local authorities, we ensure that our forecasts are both scientifically robust and practically relevant. We strive to make weather information accessible and actionable for everyone—from farmers optimizing crop cycles and fishermen planning safe voyages, to city planners managing infrastructure and families organizing their daily routines. Through intuitive platforms, multilingual support, and inclusive outreach, we aim to democratize weather intelligence. and contribute to a world is resilient.</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; 2025 SkyCast. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

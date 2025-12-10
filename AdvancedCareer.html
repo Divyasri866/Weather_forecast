@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <style>
+        /* Navbar Styles */
+        .navbar {
+            background: rgba(33, 37, 41, 0.95) !important;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #00ffff, #87CEEB); /* Changed to cyan/sky blue gradient */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 1px rgba(255,255,255,0.3); /* Added subtle text shadow */
+        }
+
+        .nav-link {
+            position: relative;
+            color: white !important;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #0074d9;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* Header Styles */
+        header {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            color: white;
+            text-align: center;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px auto;
+            max-width: 800px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        /* College List Styles */
+        .college-list {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            max-width: 800px;
+            margin: 20px auto;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        .college-list ol {
+            padding-left: 20px;
+        }
+
+        .college-list li {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #1CB5E0;
+            transition: all 0.3s ease;
+        }
+
+        .college-list li:hover {
+            background: rgba(255, 255, 255, 0.95);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left-color: #000046;
+        }
+
+        a {
+            text-decoration: none;
+            color: #0074d9;
+            transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+        }
+
+        a:hover, a:focus {
+            color: #ff6600;
+            background-color: #f0f0f0;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        /* Footer Styles */
+        footer {
+            background: #001f3f;
+            color: white;
+            padding: 20px 0;
+            margin-top: 20px;
+        }
+
+        footer .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        footer .social-links {
+            margin-top: 0;
+        }
+
+        footer a {
+            color: white;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: #0074d9;
+            background: none;
+        }
+
+        /* Background */
+        body {
+            background: linear-gradient(135deg, #000046 0%, #1CB5E0 100%);
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 768px) {
+            footer .container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            footer .social-links {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">SkyCast</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'index'%}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'weather_options'%}">Weather</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{% url 'otherservices'%}">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'blog2'%}">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'feedback'%}">Feedback</a></li>
+               </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header>
+        <h1>Ultimate Guide to MS in Computer Science Colleges</h1>
+    </header>
+
+    <!-- College List -->
+    <section class="college-list">
+        <ol>
+            <li><a href="https://www.iitb.ac.in/" target="_blank"><strong>IIT Bombay</strong></a>, Mumbai: Known for its cutting-edge research and excellent faculty.</li>
+            <li><a href="https://home.iitd.ac.in/" target="_blank"><strong>IIT Delhi</strong></a>, New Delhi: Offers a comprehensive M.Tech curriculum.</li>
+            <li><a href="https://www.iitm.ac.in/" target="_blank"><strong>IIT Madras</strong></a>, Chennai: Provides specialized courses in Computer Science.</li>
+            <li><a href="https://www.iitk.ac.in/" target="_blank"><strong>IIT Kanpur</strong></a>, Kanpur: Focuses on research and development.</li>
+            <li><a href="http://www.iitkgp.ac.in/" target="_blank"><strong>IIT Kharagpur</strong></a>, Kharagpur: Offers diverse research opportunities.</li>
+            <li><a href="https://www.iitr.ac.in/" target="_blank"><strong>IIT Roorkee</strong></a>, Roorkee: Balances theory and application in its curriculum.</li>
+            <li><a href="https://www.iitg.ac.in/" target="_blank"><strong>IIT Guwahati</strong></a>, Guwahati: Known for research initiatives.</li>
+            <li><a href="https://www.bits-pilani.ac.in/" target="_blank"><strong>BITS Pilani</strong></a>, Pilani: Offers an M.E. in Computer Science.</li>
+            <li><a href="https://www.iitbhu.ac.in/" target="_blank"><strong>IIT (BHU)</strong></a>, Varanasi: Focuses on emerging technologies.</li>
+        </ol>
+    </section>
+    <!-- Header -->
+    <header>
+        <h1>Discover the Most Sought-After M.Tech Colleges</h1>
+    </header>
+    <!-- College List -->
+    <section class="college-list">
+        <ol>
+            <li><a href="#" target="_blank"><strong>VIIT Duvvada</strong></a>, Visakhapatnam: Quality education, research opportunities.</li>
+            <li><a href="#" target="_blank"><strong>IIT Bombay</strong></a>, Mumbai: Excellence, research, innovation, engineering, leadership.</li>
+            <li><a href="#" target="_blank"><strong>IIT Delhi</strong></a>, New Delhi: Pioneering minds, futuristic research hub.</li>
+            <li><a href="#" target="_blank"><strong>IIT Madras</strong></a>, Chennai: Top-ranked, cutting-edge research, innovation hub.</li>
+            <li><a href="#" target="_blank"><strong>IIT Hyderabad</strong></a>, Hyderabad: Modern campus, research-driven, tech powerhouse.</li>
+            <li><a href="#" target="_blank"><strong>IIT Kharagpur</strong></a>, Kharagpur: Prestigious, innovative, research-driven, challenging.</li>
+            <li><a href="#" target="_blank"><strong>NIT Trichy</strong></a>, Tiruchirappalli: Excellence, innovation, research, growth, and opportunity.</li>
+            <li><a href="#" target="_blank"><strong>NIT Warangal</strong></a>, Warangal: Knowledge, innovation, research, growth, and success.</li>
+            <li><a href="#" target="_blank"><strong>BITS Pilani</strong></a>, Pilani: Challenging, prestigious, and career-enhancing programs.</li>
+            <li><a href="#" target="_blank"><strong>IIIT Hyderabad</strong></a>, Hyderabad: Innovative, research-driven, and career-boosting.</li>
+            <li><a href="#" target="_blank"><strong>Andhra University</strong></a>, Visakhapatnam: Affordable, practical, research-oriented, and career-focused.</li>
+            <li><a href="#" target="_blank"><strong>JNTUK</strong></a>, Kakinada: Industry-oriented, practical, research-driven, and career-focused.</li>
+            <li><a href="#" target="_blank"><strong>GITAM</strong></a>, Visakhapatnam: Creativity, industry links, research, growth, and affordability.</li>
+            <li><a href="#" target="_blank"><strong>GVP</strong></a>, Visakhapatnam: Knowledge-rich, industry-oriented, practical, and career-advancing.</li>
+            <li><a href="#" target="_blank"><strong>KL University</strong></a>, Guntur: Cutting-edge, industry-focused, and career-oriented.</li>
+        </ol>
+    </section>
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="copyright">
+                <p>&copy; 2025 SkyCast. All rights reserved.</p>
+            </div>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
